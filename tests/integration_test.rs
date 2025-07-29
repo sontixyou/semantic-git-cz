@@ -16,9 +16,9 @@ fn test_commit_type_display() {
 
 #[test]
 fn test_commit_type_emoji() {
-    assert_eq!(CommitType::Feat.emoji(), "✨");
+    assert_eq!(CommitType::Feat.emoji(), "🎸");
     assert_eq!(CommitType::Fix.emoji(), "🐛");
-    assert_eq!(CommitType::Docs.emoji(), "📚");
+    assert_eq!(CommitType::Docs.emoji(), "✏");
 }
 
 #[test]
@@ -40,28 +40,28 @@ fn test_commit_type_description_with_emoji() {
         .map(|t| format!("{} {}", t.emoji(), t.description()))
         .collect();
 
-    assert_eq!(descriptions[0], "✨ A new feature");
+    assert_eq!(descriptions[0], "🎸 A new feature");
     assert_eq!(descriptions[1], "🐛 A bug fix");
-    assert_eq!(descriptions[2], "📚 Documentation only changes");
+    assert_eq!(descriptions[2], "✏ Documentation only changes");
     assert_eq!(
         descriptions[3],
-        "💎 Changes that do not affect the meaning of the code"
+        "💄 Changes that do not affect the meaning of the code"
     );
     assert_eq!(
         descriptions[4],
-        "♻️ A code change that neither fixes a bug nor adds a feature"
+        "💡 A code change that neither fixes a bug nor adds a feature"
     );
     assert_eq!(
         descriptions[5],
-        "🧪 Adding missing tests or correcting existing tests"
+        "💍 Adding missing tests or correcting existing tests"
     );
     assert_eq!(
         descriptions[6],
-        "🔧 Changes to the build process or auxiliary tools"
+        "🤖 Changes to the build process or auxiliary tools"
     );
     assert_eq!(
         descriptions[7],
-        "🚀 Changes to CI configuration files and scripts"
+        "🎡 Changes to CI configuration files and scripts"
     );
     assert_eq!(
         descriptions[8],
