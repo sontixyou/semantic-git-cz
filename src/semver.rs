@@ -2,9 +2,9 @@ use std::fmt;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SemverType {
-    Major,  // 破壊的変更
-    Minor,  // 機能追加
-    Patch,  // バグ修正
+    Major, // 破壊的変更
+    Minor, // 機能追加
+    Patch, // バグ修正
 }
 
 impl fmt::Display for SemverType {
@@ -40,9 +40,18 @@ mod tests {
 
     #[test]
     fn test_semver_description() {
-        assert_eq!(SemverType::Major.description(), "Breaking changes (incompatible API changes)");
-        assert_eq!(SemverType::Minor.description(), "New features (backwards compatible)");
-        assert_eq!(SemverType::Patch.description(), "Bug fixes (backwards compatible)");
+        assert_eq!(
+            SemverType::Major.description(),
+            "Breaking changes (incompatible API changes)"
+        );
+        assert_eq!(
+            SemverType::Minor.description(),
+            "New features (backwards compatible)"
+        );
+        assert_eq!(
+            SemverType::Patch.description(),
+            "Bug fixes (backwards compatible)"
+        );
     }
 
     #[test]

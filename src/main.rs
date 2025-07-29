@@ -1,5 +1,5 @@
-use semantic_git_cz::{Result, AppError};
-use semantic_git_cz::{semver::SemverType, commit_types::CommitType, prompts, git};
+use semantic_git_cz::{commit_types::CommitType, git, prompts, semver::SemverType};
+use semantic_git_cz::{AppError, Result};
 use std::env;
 
 const VERSION: &str = "0.1.0";
@@ -20,22 +20,22 @@ DESCRIPTION:
 
 fn main() {
     if let Err(e) = run() {
-        eprintln!("Error: {}", e);
+        eprintln!("Error: {e}");
         std::process::exit(1);
     }
 }
 
 fn run() -> Result<()> {
     let args: Vec<String> = env::args().collect();
-    
+
     if args.len() > 1 {
         match args[1].as_str() {
             "-h" | "--help" => {
-                println!("{}", HELP_MESSAGE);
+                println!("{HELP_MESSAGE}");
                 return Ok(());
             }
             "-v" | "--version" => {
-                println!("semantic-git-cz {}", VERSION);
+                println!("semantic-git-cz {VERSION}");
                 return Ok(());
             }
             _ => {
@@ -45,43 +45,40 @@ fn run() -> Result<()> {
             }
         }
     }
-    
+
     // Check if we're in a git repository
     if !git::is_git_repository()? {
         return Err(AppError::Git("Not in a git repository".to_string()));
     }
-    
+
     // Check if there are staged changes
     if !git::has_staged_changes()? {
         return Err(AppError::Git("No staged changes to commit".to_string()));
     }
-    
+
     println!("Semantic Git-CZ - Create semantic commit messages\n");
-    
+
     // Show staged files
     let staged_files = git::get_staged_files()?;
     if !staged_files.is_empty() {
         println!("Staged files:");
         for file in &staged_files {
-            println!("  - {}", file);
+            println!("  - {file}");
         }
         println!();
     }
-    
+
     // Select semantic version
     let semver_types = vec![SemverType::Major, SemverType::Minor, SemverType::Patch];
-    let semver_descriptions: Vec<&str> = semver_types
-        .iter()
-        .map(|t| t.description())
-        .collect();
-    
+    let semver_descriptions: Vec<&str> = semver_types.iter().map(|t| t.description()).collect();
+
     let semver_index = prompts::select_from_list(
         "Select the semantic version type:",
         &semver_types,
         Some(&semver_descriptions),
     )?;
     let selected_semver = semver_types[semver_index];
-    
+
     // Select commit type
     let commit_types = vec![
         CommitType::Feat,
@@ -98,26 +95,26 @@ fn run() -> Result<()> {
         .iter()
         .map(|t| format!("{} {}", t.emoji(), t.description()))
         .collect();
-    let commit_descriptions_refs: Vec<&str> = commit_descriptions
-        .iter()
-        .map(|s| s.as_str())
-        .collect();
-    
+    let commit_descriptions_refs: Vec<&str> =
+        commit_descriptions.iter().map(|s| s.as_str()).collect();
+
     let commit_index = prompts::select_from_list(
         "\nSelect the commit type:",
         &commit_types,
         Some(&commit_descriptions_refs),
     )?;
     let selected_commit = commit_types[commit_index];
-    
+
     // Get commit message
     println!();
     let message = prompts::prompt("Enter commit message: ")?;
-    
+
     if message.is_empty() {
-        return Err(AppError::InvalidInput("Commit message cannot be empty".to_string()));
+        return Err(AppError::InvalidInput(
+            "Commit message cannot be empty".to_string(),
+        ));
     }
-    
+
     // Format the commit message
     let formatted_message = format!(
         "{}-{}: {} {}",
@@ -126,20 +123,20 @@ fn run() -> Result<()> {
         selected_commit.emoji(),
         message
     );
-    
+
     // Show preview
     println!("\nCommit message preview:");
-    println!("  {}", formatted_message);
-    
+    println!("  {formatted_message}");
+
     // Confirm
     let confirm = prompts::prompt("\nConfirm commit? (y/n): ")?;
-    
+
     if confirm.to_lowercase() == "y" || confirm.to_lowercase() == "yes" {
         git::commit(&formatted_message)?;
         println!("\n✅ Commit created successfully!");
     } else {
         println!("\n❌ Commit cancelled");
     }
-    
+
     Ok(())
 }

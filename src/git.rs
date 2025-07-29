@@ -3,49 +3,49 @@ use std::process::Command;
 
 pub fn is_git_repository() -> Result<bool> {
     let output = Command::new("git")
-        .args(&["rev-parse", "--is-inside-work-tree"])
+        .args(["rev-parse", "--is-inside-work-tree"])
         .output()?;
-    
+
     Ok(output.status.success())
 }
 
 pub fn has_staged_changes() -> Result<bool> {
     let output = Command::new("git")
-        .args(&["diff", "--cached", "--quiet"])
+        .args(["diff", "--cached", "--quiet"])
         .output()?;
-    
+
     Ok(!output.status.success())
 }
 
 pub fn commit(message: &str) -> Result<()> {
     let output = Command::new("git")
-        .args(&["commit", "-m", message])
+        .args(["commit", "-m", message])
         .output()?;
-    
+
     if !output.status.success() {
         let error_msg = String::from_utf8_lossy(&output.stderr);
         return Err(AppError::Git(error_msg.to_string()));
     }
-    
+
     Ok(())
 }
 
 pub fn get_staged_files() -> Result<Vec<String>> {
     let output = Command::new("git")
-        .args(&["diff", "--cached", "--name-only"])
+        .args(["diff", "--cached", "--name-only"])
         .output()?;
-    
+
     if !output.status.success() {
         let error_msg = String::from_utf8_lossy(&output.stderr);
         return Err(AppError::Git(error_msg.to_string()));
     }
-    
+
     let files = String::from_utf8_lossy(&output.stdout)
         .lines()
         .filter(|line| !line.is_empty())
         .map(|s| s.to_string())
         .collect();
-    
+
     Ok(files)
 }
 
@@ -72,7 +72,7 @@ mod tests {
         match result {
             Ok(files) => {
                 assert!(files.is_empty() || !files.is_empty());
-            },
+            }
             Err(_) => {
                 // Expected in non-git directory or when git command fails
             }
@@ -83,8 +83,8 @@ mod tests {
     fn test_commit_with_empty_message() {
         let result = commit("");
         match result {
-            Ok(_) => {},
-            Err(AppError::Git(_)) => {},
+            Ok(_) => {}
+            Err(AppError::Git(_)) => {}
             Err(_) => panic!("Expected Git error or success"),
         }
     }
@@ -94,7 +94,7 @@ mod tests {
         let output = Command::new("git")
             .args(&["this-command-does-not-exist"])
             .output();
-        
+
         if let Ok(output) = output {
             if !output.status.success() {
                 let error_msg = String::from_utf8_lossy(&output.stderr);
@@ -112,7 +112,7 @@ mod tests {
             .filter(|line| !line.is_empty())
             .map(|s| s.to_string())
             .collect();
-        
+
         assert_eq!(files.len(), 3);
         assert_eq!(files[0], "file1.rs");
         assert_eq!(files[1], "file2.rs");
