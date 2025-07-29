@@ -94,15 +94,19 @@ fn run() -> Result<()> {
         CommitType::Ci,
         CommitType::Perf,
     ];
-    let commit_descriptions: Vec<&str> = commit_types
+    let commit_descriptions: Vec<String> = commit_types
         .iter()
-        .map(|t| t.description())
+        .map(|t| format!("{} {}", t.emoji(), t.description()))
+        .collect();
+    let commit_descriptions_refs: Vec<&str> = commit_descriptions
+        .iter()
+        .map(|s| s.as_str())
         .collect();
     
     let commit_index = prompts::select_from_list(
         "\nSelect the commit type:",
         &commit_types,
-        Some(&commit_descriptions),
+        Some(&commit_descriptions_refs),
     )?;
     let selected_commit = commit_types[commit_index];
     
