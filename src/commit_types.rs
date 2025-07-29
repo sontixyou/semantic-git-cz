@@ -32,14 +32,14 @@ impl fmt::Display for CommitType {
 impl CommitType {
     pub fn emoji(&self) -> &'static str {
         match self {
-            CommitType::Feat => "✨",
+            CommitType::Feat => "🎸",
             CommitType::Fix => "🐛",
-            CommitType::Docs => "📚",
-            CommitType::Style => "💎",
-            CommitType::Refactor => "♻️",
-            CommitType::Test => "🧪",
-            CommitType::Chore => "🔧",
-            CommitType::Ci => "🚀",
+            CommitType::Docs => "✏",
+            CommitType::Style => "💄",
+            CommitType::Refactor => "💡",
+            CommitType::Test => "💍",
+            CommitType::Chore => "🤖",
+            CommitType::Ci => "🎡",
             CommitType::Perf => "⚡",
         }
     }
@@ -78,14 +78,14 @@ mod tests {
 
     #[test]
     fn test_commit_type_emoji() {
-        assert_eq!(CommitType::Feat.emoji(), "✨");
+        assert_eq!(CommitType::Feat.emoji(), "🎸");
         assert_eq!(CommitType::Fix.emoji(), "🐛");
-        assert_eq!(CommitType::Docs.emoji(), "📚");
-        assert_eq!(CommitType::Style.emoji(), "💎");
-        assert_eq!(CommitType::Refactor.emoji(), "♻️");
-        assert_eq!(CommitType::Test.emoji(), "🧪");
-        assert_eq!(CommitType::Chore.emoji(), "🔧");
-        assert_eq!(CommitType::Ci.emoji(), "🚀");
+        assert_eq!(CommitType::Docs.emoji(), "✏");
+        assert_eq!(CommitType::Style.emoji(), "💄");
+        assert_eq!(CommitType::Refactor.emoji(), "💡");
+        assert_eq!(CommitType::Test.emoji(), "💍");
+        assert_eq!(CommitType::Chore.emoji(), "🤖");
+        assert_eq!(CommitType::Ci.emoji(), "🎡");
         assert_eq!(CommitType::Perf.emoji(), "⚡");
     }
 
