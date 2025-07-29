@@ -94,12 +94,30 @@ mod tests {
         assert_eq!(CommitType::Feat.description(), "A new feature");
         assert_eq!(CommitType::Fix.description(), "A bug fix");
         assert_eq!(CommitType::Docs.description(), "Documentation only changes");
-        assert_eq!(CommitType::Style.description(), "Changes that do not affect the meaning of the code");
-        assert_eq!(CommitType::Refactor.description(), "A code change that neither fixes a bug nor adds a feature");
-        assert_eq!(CommitType::Test.description(), "Adding missing tests or correcting existing tests");
-        assert_eq!(CommitType::Chore.description(), "Changes to the build process or auxiliary tools");
-        assert_eq!(CommitType::Ci.description(), "Changes to CI configuration files and scripts");
-        assert_eq!(CommitType::Perf.description(), "A code change that improves performance");
+        assert_eq!(
+            CommitType::Style.description(),
+            "Changes that do not affect the meaning of the code"
+        );
+        assert_eq!(
+            CommitType::Refactor.description(),
+            "A code change that neither fixes a bug nor adds a feature"
+        );
+        assert_eq!(
+            CommitType::Test.description(),
+            "Adding missing tests or correcting existing tests"
+        );
+        assert_eq!(
+            CommitType::Chore.description(),
+            "Changes to the build process or auxiliary tools"
+        );
+        assert_eq!(
+            CommitType::Ci.description(),
+            "Changes to CI configuration files and scripts"
+        );
+        assert_eq!(
+            CommitType::Perf.description(),
+            "A code change that improves performance"
+        );
     }
 
     #[test]
@@ -127,11 +145,17 @@ mod tests {
     #[test]
     fn test_all_commit_types_have_unique_emojis() {
         let types = [
-            CommitType::Feat, CommitType::Fix, CommitType::Docs,
-            CommitType::Style, CommitType::Refactor, CommitType::Test,
-            CommitType::Chore, CommitType::Ci, CommitType::Perf,
+            CommitType::Feat,
+            CommitType::Fix,
+            CommitType::Docs,
+            CommitType::Style,
+            CommitType::Refactor,
+            CommitType::Test,
+            CommitType::Chore,
+            CommitType::Ci,
+            CommitType::Perf,
         ];
-        
+
         let mut emojis = Vec::new();
         for commit_type in &types {
             let emoji = commit_type.emoji();

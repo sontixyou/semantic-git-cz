@@ -11,9 +11,9 @@ pub enum AppError {
 impl fmt::Display for AppError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            AppError::Io(e) => write!(f, "IO error: {}", e),
-            AppError::Git(msg) => write!(f, "Git error: {}", msg),
-            AppError::InvalidInput(msg) => write!(f, "Invalid input: {}", msg),
+            AppError::Io(e) => write!(f, "IO error: {e}"),
+            AppError::Git(msg) => write!(f, "Git error: {msg}"),
+            AppError::InvalidInput(msg) => write!(f, "Invalid input: {msg}"),
         }
     }
 }
@@ -28,10 +28,10 @@ impl From<std::io::Error> for AppError {
 
 pub type Result<T> = std::result::Result<T, AppError>;
 
-pub mod semver;
 pub mod commit_types;
-pub mod prompts;
 pub mod git;
+pub mod prompts;
+pub mod semver;
 
 #[cfg(test)]
 mod tests {
@@ -56,7 +56,7 @@ mod tests {
         let io_error = io::Error::new(io::ErrorKind::PermissionDenied, "access denied");
         let app_error: AppError = io_error.into();
         match app_error {
-            AppError::Io(_) => {},
+            AppError::Io(_) => {}
             _ => panic!("Expected Io variant"),
         }
     }
