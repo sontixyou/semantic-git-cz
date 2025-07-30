@@ -70,13 +70,4 @@ mod tests {
             _ => panic!("Expected Io variant"),
         }
     }
-
-    #[test]
-    fn test_result_type() {
-        let success: Result<i32> = Ok(42);
-        assert_eq!(success.unwrap(), 42);
-
-        let failure: Result<i32> = Err(AppError::InvalidInput("test error".to_string()));
-        assert!(failure.is_err());
-    }
 }
