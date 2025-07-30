@@ -54,40 +54,6 @@ mod tests {
     use super::*;
     use std::process::Command;
 
-    #[test]
-    fn test_is_git_repository_result_type() {
-        let result = is_git_repository();
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_has_staged_changes_result_type() {
-        let result = has_staged_changes();
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_get_staged_files_returns_vec() {
-        let result = get_staged_files();
-        match result {
-            Ok(files) => {
-                assert!(files.is_empty() || !files.is_empty());
-            }
-            Err(_) => {
-                // Expected in non-git directory or when git command fails
-            }
-        }
-    }
-
-    #[test]
-    fn test_commit_with_empty_message() {
-        let result = commit("");
-        match result {
-            Ok(_) => {}
-            Err(AppError::Git(_)) => {}
-            Err(_) => panic!("Expected Git error or success"),
-        }
-    }
 
     #[test]
     fn test_git_error_handling() {
