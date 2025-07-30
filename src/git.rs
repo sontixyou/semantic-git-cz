@@ -54,7 +54,6 @@ mod tests {
     use super::*;
     use std::process::Command;
 
-
     #[test]
     fn test_git_error_handling() {
         let output = Command::new("git")
