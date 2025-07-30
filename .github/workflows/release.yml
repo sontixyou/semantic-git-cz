@@ -93,8 +93,3 @@ jobs:
             --title "Release v${{ env.VERSION }}" \
             --notes "Automatic release by GitHub Actions.
 
-### Checksums
-\`\`\`
-$CHECKSUM
-\`\`\`" \
-            ./semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz
