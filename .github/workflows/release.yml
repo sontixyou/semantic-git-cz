@@ -20,7 +20,6 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: "1.88.0"
-          
       - name: Cache Rust dependencies
         uses: actions/cache@v4
         with:
@@ -39,20 +38,21 @@ jobs:
       - name: Run security audit
         run: |
           cargo install cargo-audit
-          cargo audit
+          if ! cargo audit; then
+            echo "Security audit failed! Please review the vulnerabilities."
+            exit 1
+          fi
 
       - name: Build project
         run: cargo build --release --target aarch64-apple-darwin
 
       - name: Create archive
         run: |
-          mkdir -p target/aarch64-apple-darwin/release/${{ env.VERSION }}
           cd target/aarch64-apple-darwin/release
-          tar -czvf ${{ env.VERSION }}/semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz semantic-git-cz
-          
+          tar -czvf semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz semantic-git-cz
       - name: Generate checksum
         run: |
-          cd target/aarch64-apple-darwin/release/${{ env.VERSION }}
+          cd target/aarch64-apple-darwin/release
           shasum -a 256 semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz > semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256
 
       - name: Upload release asset
@@ -60,8 +60,8 @@ jobs:
         with:
           name: semantic-git-cz-aarch64-apple-darwin
           path: |
-            target/aarch64-apple-darwin/release/${{ env.VERSION }}/semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz
-            target/aarch64-apple-darwin/release/${{ env.VERSION }}/semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256
+            target/aarch64-apple-darwin/release/semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz
+            target/aarch64-apple-darwin/release/semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256
 
   create_tag_and_release:
     needs: build
@@ -80,9 +80,12 @@ jobs:
         with:
           name: semantic-git-cz-aarch64-apple-darwin
           path: .
-          
       - name: Verify checksum
-        run: shasum -a 256 -c semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256
+        run: |
+          if ! shasum -a 256 -c semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256; then
+            echo "Checksum verification failed!"
+            exit 1
+          fi
 
       - name: Create GitHub Release
         env:
@@ -91,5 +94,8 @@ jobs:
           CHECKSUM=$(cat semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256)
           gh release create "v${{ env.VERSION }}" \
             --title "Release v${{ env.VERSION }}" \
-            --notes "Automatic release by GitHub Actions."
+            --notes "Automatic release by GitHub Actions.
 
+Checksum: ${CHECKSUM}" \
+            semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz \
+            semantic-git-cz-${{ env.VERSION }}-aarch64-apple-darwin.tar.gz.sha256
