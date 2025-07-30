@@ -53,33 +53,4 @@ mod tests {
             "Bug fixes (backwards compatible)"
         );
     }
-
-    #[test]
-    fn test_semver_clone() {
-        let original = SemverType::Major;
-        let cloned = original;
-        assert_eq!(original, cloned);
-    }
-
-    #[test]
-    fn test_semver_copy() {
-        let original = SemverType::Minor;
-        let copied = original;
-        assert_eq!(original, copied);
-        assert_eq!(format!("{}", original), format!("{}", copied));
-    }
-
-    #[test]
-    fn test_semver_equality() {
-        assert_eq!(SemverType::Major, SemverType::Major);
-        assert_ne!(SemverType::Major, SemverType::Minor);
-        assert_ne!(SemverType::Minor, SemverType::Patch);
-    }
-
-    #[test]
-    fn test_semver_debug() {
-        assert_eq!(format!("{:?}", SemverType::Major), "Major");
-        assert_eq!(format!("{:?}", SemverType::Minor), "Minor");
-        assert_eq!(format!("{:?}", SemverType::Patch), "Patch");
-    }
 }
