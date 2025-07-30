@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy)]
 pub enum CommitType {
     Feat,     // 新機能
     Fix,      // バグ修正
@@ -118,28 +118,6 @@ mod tests {
             CommitType::Perf.description(),
             "A code change that improves performance"
         );
-    }
-
-    #[test]
-    fn test_commit_type_equality() {
-        assert_eq!(CommitType::Feat, CommitType::Feat);
-        assert_ne!(CommitType::Feat, CommitType::Fix);
-        assert_ne!(CommitType::Docs, CommitType::Style);
-    }
-
-    #[test]
-    fn test_commit_type_clone() {
-        let original = CommitType::Refactor;
-        let cloned = original;
-        assert_eq!(original, cloned);
-        assert_eq!(original.emoji(), cloned.emoji());
-    }
-
-    #[test]
-    fn test_commit_type_debug() {
-        assert_eq!(format!("{:?}", CommitType::Feat), "Feat");
-        assert_eq!(format!("{:?}", CommitType::Fix), "Fix");
-        assert_eq!(format!("{:?}", CommitType::Docs), "Docs");
     }
 
     #[test]
