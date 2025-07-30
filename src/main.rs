@@ -2,7 +2,7 @@ use semantic_git_cz::{commit_types::CommitType, git, prompts, semver::SemverType
 use semantic_git_cz::{AppError, Result};
 use std::env;
 
-const VERSION: &str = "0.1.0";
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 const HELP_MESSAGE: &str = r#"Semantic Git-CZ - A semantic commit message tool
 
 USAGE:
