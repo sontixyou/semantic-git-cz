@@ -105,24 +105,39 @@ fn run() -> Result<()> {
     )?;
     let selected_commit = commit_types[commit_index];
 
-    // Get commit message
+    // Get commit message (subject)
     println!();
-    let message = prompts::prompt("Enter commit message: ")?;
+    let subject = prompts::prompt("Enter commit message (subject): ")?;
 
-    if message.is_empty() {
+    if subject.is_empty() {
         return Err(AppError::InvalidInput(
-            "Commit message cannot be empty".to_string(),
+            "Commit subject cannot be empty".to_string(),
         ));
     }
 
+    // Get commit body (optional)
+    println!();
+    let body = prompts::prompt_multiline("Enter commit body (optional):")?;
+
     // Format the commit message
-    let formatted_message = format!(
-        "{}-{}: {} {}",
-        selected_semver,
-        selected_commit,
-        selected_commit.emoji(),
-        message
-    );
+    let formatted_message = if body.is_empty() {
+        format!(
+            "{}-{}: {} {}",
+            selected_semver,
+            selected_commit,
+            selected_commit.emoji(),
+            subject
+        )
+    } else {
+        format!(
+            "{}-{}: {} {}\n\n{}",
+            selected_semver,
+            selected_commit,
+            selected_commit.emoji(),
+            subject,
+            body
+        )
+    };
 
     // Show preview
     println!("\nCommit message preview:");

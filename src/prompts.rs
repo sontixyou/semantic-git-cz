@@ -11,6 +11,27 @@ pub fn prompt(message: &str) -> Result<String> {
     Ok(input.trim().to_string())
 }
 
+pub fn prompt_multiline(message: &str) -> Result<String> {
+    println!("{message}");
+    println!("(Enter an empty line to finish)");
+
+    let mut lines = Vec::new();
+
+    loop {
+        let mut input = String::new();
+        io::stdin().read_line(&mut input)?;
+
+        let line = input.trim();
+        if line.is_empty() {
+            break;
+        }
+
+        lines.push(line.to_string());
+    }
+
+    Ok(lines.join("\n"))
+}
+
 pub fn select_from_list<T: std::fmt::Display>(
     message: &str,
     items: &[T],
